@@ -2,6 +2,15 @@
 
 All releases follow [VERSIONING.md](VERSIONING.md).
 
+## v1.2.0 — 2026-10-15
+
+Cancelling a paid order (refund, then return the stock). Additions only:
+
+- order-service: `OrderCancellationRequested` v1 event (a CONFIRMED/PROCESSING order is now
+  CANCELLATION_PENDING; consumed by the saga)
+- inventory-service: `InventoryReturnRequested` v1 command (put a CONFIRMED reservation's stock back on
+  hand) and its answer, the `InventoryReturned` v1 event
+
 ## v1.1.0 — 2026-10-15
 
 - payment-service: `Payment.status` and `Payment.provider` are published as enums (they were plain

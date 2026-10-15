@@ -5,7 +5,7 @@ Rules: an **event** is owned by its producer; a **command** is owned by its cons
 receiver's API). The owner decides changes, under [VERSIONING.md](../VERSIONING.md); everyone listed is
 affected by them.
 
-## Messages (25)
+## Messages (28)
 
 | Message | Kind | Owner | Producers | Consumers | Channel | Schema |
 |---|---|---|---|---|---|---|
@@ -19,7 +19,10 @@ affected by them.
 | `InventoryReservationReleased` v1 | event | **inventory-service** | inventory-service | saga-orchestrator | SNS inventory-events | [schema](../schemas/inventory-service/inventory-reservation-released.v1.schema.json) |
 | `InventoryReservationRequested` v1 | command | **inventory-service** | saga-orchestrator | inventory-service | SQS inventory-commands | [schema](../schemas/inventory-service/inventory-reservation-requested.v1.schema.json) |
 | `InventoryReserved` v1 | event | **inventory-service** | inventory-service | saga-orchestrator | SNS inventory-events | [schema](../schemas/inventory-service/inventory-reserved.v1.schema.json) |
+| `InventoryReturnRequested` v1 | command | **inventory-service** | saga-orchestrator | inventory-service | SQS inventory-commands | [schema](../schemas/inventory-service/inventory-return-requested.v1.schema.json) |
+| `InventoryReturned` v1 | event | **inventory-service** | inventory-service | saga-orchestrator | SNS inventory-events | [schema](../schemas/inventory-service/inventory-returned.v1.schema.json) |
 | `NotificationRequested` v1 | command | **notification-service** | saga-orchestrator, order-service, payment-service | notification-service | SQS notification-commands | [schema](../schemas/notification-service/notification-requested.v1.schema.json) |
+| `OrderCancellationRequested` v1 | event | **order-service** | order-service | saga-orchestrator | SNS order-events | [schema](../schemas/order-service/order-cancellation-requested.v1.schema.json) |
 | `OrderCancelled` v1 | event | **order-service** | order-service | saga-orchestrator, notification-service | SNS order-events | [schema](../schemas/order-service/order-cancelled.v1.schema.json) |
 | `OrderConfirmed` v1 | event | **order-service** | order-service | saga-orchestrator, notification-service | SNS order-events | [schema](../schemas/order-service/order-confirmed.v1.schema.json) |
 | `OrderCreated` v1 | event | **order-service** | order-service | — | SNS order-events | [schema](../schemas/order-service/order-created.v1.schema.json) |

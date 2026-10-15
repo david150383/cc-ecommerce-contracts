@@ -39,6 +39,9 @@
         },
         "InventoryReservationRequestedV1": {
           "$ref": "#/components/messages/InventoryReservationRequestedV1"
+        },
+        "InventoryReturnRequestedV1": {
+          "$ref": "#/components/messages/InventoryReturnRequestedV1"
         }
       },
       "bindings": {
@@ -70,6 +73,9 @@
         },
         "InventoryReservedV1": {
           "$ref": "#/components/messages/InventoryReservedV1"
+        },
+        "InventoryReturnedV1": {
+          "$ref": "#/components/messages/InventoryReturnedV1"
         }
       },
       "bindings": {
@@ -122,6 +128,9 @@
       "title": "order-events",
       "description": "SNS topic. Fanned out to SQS inbox queues, filtered on the messageType attribute.",
       "messages": {
+        "OrderCancellationRequestedV1": {
+          "$ref": "#/components/messages/OrderCancellationRequestedV1"
+        },
         "OrderCancelledV1": {
           "$ref": "#/components/messages/OrderCancelledV1"
         },
@@ -273,6 +282,18 @@
       ],
       "x-service": "inventory-service"
     },
+    "inventory-service.receive.InventoryReturnRequestedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/inventory-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-commands/messages/InventoryReturnRequestedV1"
+        }
+      ],
+      "x-service": "inventory-service"
+    },
     "inventory-service.send.InventoryLowStockV1": {
       "action": "send",
       "channel": {
@@ -329,6 +350,18 @@
       "messages": [
         {
           "$ref": "#/channels/inventory-events/messages/InventoryReservedV1"
+        }
+      ],
+      "x-service": "inventory-service"
+    },
+    "inventory-service.send.InventoryReturnedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/inventory-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-events/messages/InventoryReturnedV1"
         }
       ],
       "x-service": "inventory-service"
@@ -461,6 +494,18 @@
       "messages": [
         {
           "$ref": "#/channels/notification-commands/messages/NotificationRequestedV1"
+        }
+      ],
+      "x-service": "order-service"
+    },
+    "order-service.send.OrderCancellationRequestedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/order-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-events/messages/OrderCancellationRequestedV1"
         }
       ],
       "x-service": "order-service"
@@ -645,6 +690,30 @@
       ],
       "x-service": "saga-orchestrator"
     },
+    "saga-orchestrator.receive.InventoryReturnedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/inventory-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-events/messages/InventoryReturnedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.receive.OrderCancellationRequestedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/order-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-events/messages/OrderCancellationRequestedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
     "saga-orchestrator.receive.OrderCancelledV1": {
       "action": "receive",
       "channel": {
@@ -773,6 +842,18 @@
       "messages": [
         {
           "$ref": "#/channels/inventory-commands/messages/InventoryReservationRequestedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.send.InventoryReturnRequestedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/inventory-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-commands/messages/InventoryReturnRequestedV1"
         }
       ],
       "x-service": "saga-orchestrator"
@@ -968,6 +1049,34 @@
         "x-kind": "event",
         "x-owner": "inventory-service"
       },
+      "InventoryReturnedV1": {
+        "name": "InventoryReturned",
+        "title": "InventoryReturned v1",
+        "summary": "Answer to InventoryReturnRequested. RETURNED: the reservation's stock is back on hand (also re-sent for a duplicate request). NOTHING_TO_RETURN: the reservation was never confirmed, so there was no stock to put back.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/inventory-service/inventory-returned.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "inventory-service"
+      },
+      "InventoryReturnRequestedV1": {
+        "name": "InventoryReturnRequested",
+        "title": "InventoryReturnRequested v1",
+        "summary": "Put the stock of a CONFIRMED reservation back on hand (the order was cancelled before it shipped).",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/inventory-service/inventory-return-requested.v1.schema.json"
+          }
+        },
+        "x-kind": "command",
+        "x-owner": "inventory-service"
+      },
       "NotificationRequestedV1": {
         "name": "NotificationRequested",
         "title": "NotificationRequested v1",
@@ -981,6 +1090,20 @@
         },
         "x-kind": "command",
         "x-owner": "notification-service"
+      },
+      "OrderCancellationRequestedV1": {
+        "name": "OrderCancellationRequested",
+        "title": "OrderCancellationRequested v1",
+        "summary": "A paid order (CONFIRMED or PROCESSING) is now CANCELLATION_PENDING: the customer or an admin asked to cancel it. The saga refunds the payment and returns the stock.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/order-service/order-cancellation-requested.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "order-service"
       },
       "OrderCancelledV1": {
         "name": "OrderCancelled",
