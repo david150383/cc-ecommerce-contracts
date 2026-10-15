@@ -29,7 +29,7 @@
       "required": [
         "orderId",
         "customerId",
-        "total"
+        "grandTotal"
       ],
       "additionalProperties": false,
       "properties": {
@@ -41,7 +41,7 @@
           "type": "string",
           "format": "uuid"
         },
-        "total": {
+        "grandTotal": {
           "type": "object",
           "description": "Integer minor units + ISO 4217 currency. Never floating point.",
           "required": [

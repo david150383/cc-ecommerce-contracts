@@ -12,7 +12,7 @@
   "payload": {
     "orderId": "0192a1b2-0000-7000-8000-000000000201",
     "customerId": "0192a1b2-0000-7000-8000-000000000101",
-    "total": {
+    "grandTotal": {
       "amountMinor": 117764,
       "currency": "INR"
     }
