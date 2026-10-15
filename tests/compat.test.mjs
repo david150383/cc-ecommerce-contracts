@@ -45,10 +45,30 @@ describe("schema rules", () => {
 });
 
 describe("message catalog", () => {
-  const head = loadCatalog();
+  // A FIXED fixture (not the live schemas): these rules must not change meaning when the catalog evolves.
+  const envelope = obj({ messageId: str, messageType: str, correlationId: str, payload: { type: "object" } });
+  const message = (name, kind, owner, payload) => ({
+    name, version: 1, kind, owner, channel: kind === "event" ? `SNS ${owner}-events` : `SQS ${owner}-commands`,
+    producers: kind === "event" ? [owner] : ["saga-orchestrator"], consumers: kind === "event" ? ["notification-service"] : [owner],
+    schema: obj({ messageType: { const: name }, messageVersion: { const: 1 }, payload }),
+  });
+  const head = {
+    envelope,
+    messages: [
+      message("OrderConfirmed", "event", "order-service", obj({ orderId: str, total: obj({ amountMinor: { type: "integer" }, currency: str }) })),
+      message("OrderCreated", "event", "order-service", obj({ orderId: str })),
+      message("RefundRequested", "command", "payment-service", obj({ paymentId: str })),
+      message("RefundSucceeded", "event", "payment-service", obj({ refundId: str })),
+    ],
+  };
   const clone = () => JSON.parse(JSON.stringify(head));
 
-  it("the current catalog compared with itself has no findings", () => {
+  it("the real catalog compared with itself has no findings", () => {
+    const live = loadCatalog();
+    expect(compareCatalogs(live, live)).toEqual([]);
+  });
+
+  it("the fixture compared with itself has no findings", () => {
     expect(compareCatalogs(head, head)).toEqual([]);
   });
 
@@ -63,6 +83,7 @@ describe("message catalog", () => {
     const v1 = evolved.messages.find((x) => x.name === "OrderConfirmed");
     const v2 = JSON.parse(JSON.stringify(v1));
     v2.version = 2;
+    v2.schema.properties.messageVersion = { const: 2 };
     delete v2.schema.properties.payload.properties.total;
     evolved.messages.push(v2);
     expect(worst(compareCatalogs(head, evolved))).toBe("safe");
