@@ -1,6 +1,6 @@
 {
   "name": "@ecommerce/contracts",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "description": "Published API (OpenAPI) and message (JSON Schema, AsyncAPI) contracts of the e-commerce platform",
