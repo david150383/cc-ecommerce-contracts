@@ -13,7 +13,8 @@
     "check": "node scripts/build.mjs --check",
     "compat": "node scripts/compat.mjs",
     "sync:openapi": "node scripts/sync-openapi.mjs",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "version": "node scripts/build.mjs && git add asyncapi docs CHANGELOG.md"
   },
   "devDependencies": {
     "@asyncapi/specs": "^6.11.1",

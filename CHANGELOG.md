@@ -2,6 +2,12 @@
 
 All releases follow [VERSIONING.md](VERSIONING.md).
 
+## v1.1.0 — 2026-10-15
+
+- payment-service: `Payment.status` and `Payment.provider` are published as enums (they were plain
+  strings, so the contract promised less than the API returns). Narrowing a response: compatible
+  (minor). Found by the frontend's compile-time contract check.
+
 ## v1.0.0 — 2026-10-15
 
 First release: the contracts as they run today, extracted from the service repositories.

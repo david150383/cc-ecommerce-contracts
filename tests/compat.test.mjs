@@ -133,6 +133,8 @@ describe("versioning", () => {
   it("breaking needs a major, additions a minor", () => {
     expect(requiredBump([{ severity: "breaking", change: "x" }])).toBe("major");
     expect(requiredBump([{ severity: "safe", change: "operation added" }])).toBe("minor");
+    expect(requiredBump([{ severity: "safe", change: "enum restriction added" }])).toBe("minor"); // compatible, but a contract change
+    expect(requiredBump([{ severity: "safe", change: "consumers +x", metadata: true }])).toBe("patch");
     expect(requiredBump([])).toBe("none");
     expect([bumpOf("1.2.3", "2.0.0"), bumpOf("1.2.3", "1.3.0"), bumpOf("1.2.3", "1.2.4"), bumpOf("1.2.3", "1.2.3")]).toEqual(["major", "minor", "patch", "none"]);
   });
