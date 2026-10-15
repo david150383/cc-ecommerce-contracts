@@ -2,6 +2,12 @@
 
 All releases follow [VERSIONING.md](VERSIONING.md).
 
+## v1.3.0 — 2026-10-15
+
+- inventory-service: every response is now documented (they had no schema at all): stock, availability,
+  movements, low stock, reservations, and problem+json errors. Documenting a response narrows it:
+  compatible (minor). The service tests real responses against the document.
+
 ## v1.2.0 — 2026-10-15
 
 Cancelling a paid order (refund, then return the stock). Additions only:
