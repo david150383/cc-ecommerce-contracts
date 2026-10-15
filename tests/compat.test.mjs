@@ -113,6 +113,14 @@ describe("OpenAPI", () => {
     expect(worst(compareOpenApi("svc", base, doc({}, {})))).toBe("breaking");
   });
 
+  it("recursive schemas terminate, and a change deep inside one is still found", () => {
+    const tree = (extra = {}) => ({ type: "object", required: ["name"], properties: { name: str, children: { type: "array", items: { $ref: "#/components/schemas/Node" } }, ...extra } });
+    const base = doc({ "/tree": op(null, { $ref: "#/components/schemas/Node" }) }, { Node: tree({ slug: str }) });
+    const head = doc({ "/tree": op(null, { $ref: "#/components/schemas/Node" }) }, { Node: tree() });
+    expect(compareOpenApi("svc", base, base)).toEqual([]);
+    expect(compareOpenApi("svc", base, head)).toEqual([expect.objectContaining({ path: "POST /tree 200.slug", change: "property removed", severity: "breaking" })]);
+  });
+
   it("a new required request field or parameter breaks clients", () => {
     const base = doc({ "/a": op(obj({ x: str }), str) });
     expect(worst(compareOpenApi("svc", base, doc({ "/a": op(obj({ x: str, y: str }), str) })))).toBe("breaking");
