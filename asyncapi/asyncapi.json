@@ -2,7 +2,7 @@
   "asyncapi": "3.0.0",
   "info": {
     "title": "E-commerce platform messaging",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "Events (owned by their producer, SNS) and commands (owned by their consumer, SQS). Generated from schemas/ by scripts/build.mjs."
   },
   "defaultContentType": "application/json",
