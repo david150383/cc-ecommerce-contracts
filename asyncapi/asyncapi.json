@@ -2,7 +2,7 @@
   "asyncapi": "3.0.0",
   "info": {
     "title": "E-commerce platform messaging",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "Events (owned by their producer, SNS) and commands (owned by their consumer, SQS). Generated from schemas/ by scripts/build.mjs."
   },
   "defaultContentType": "application/json",
@@ -127,6 +127,9 @@
         },
         "OrderConfirmedV1": {
           "$ref": "#/components/messages/OrderConfirmedV1"
+        },
+        "OrderConfirmedV2": {
+          "$ref": "#/components/messages/OrderConfirmedV2"
         },
         "OrderCreatedV1": {
           "$ref": "#/components/messages/OrderCreatedV1"
@@ -381,6 +384,18 @@
       ],
       "x-service": "notification-service"
     },
+    "notification-service.receive.OrderConfirmedV2": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/order-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-events/messages/OrderConfirmedV2"
+        }
+      ],
+      "x-service": "notification-service"
+    },
     "notification-service.receive.OrderStatusChangedV1": {
       "action": "receive",
       "channel": {
@@ -485,6 +500,18 @@
       "messages": [
         {
           "$ref": "#/channels/order-events/messages/OrderConfirmedV1"
+        }
+      ],
+      "x-service": "order-service"
+    },
+    "order-service.send.OrderConfirmedV2": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/order-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-events/messages/OrderConfirmedV2"
         }
       ],
       "x-service": "order-service"
@@ -665,6 +692,18 @@
       "messages": [
         {
           "$ref": "#/channels/order-events/messages/OrderConfirmedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.receive.OrderConfirmedV2": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/order-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-events/messages/OrderConfirmedV2"
         }
       ],
       "x-service": "saga-orchestrator"
@@ -1005,6 +1044,20 @@
           "schemaFormat": "application/schema+json;version=2020-12",
           "schema": {
             "$ref": "../schemas/order-service/order-confirmed.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "order-service"
+      },
+      "OrderConfirmedV2": {
+        "name": "OrderConfirmed",
+        "title": "OrderConfirmed v2",
+        "summary": "Payment captured and stock committed; the order is confirmed.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/order-service/order-confirmed.v2.schema.json"
           }
         },
         "x-kind": "event",

@@ -5,7 +5,7 @@ Rules: an **event** is owned by its producer; a **command** is owned by its cons
 receiver's API). The owner decides changes, under [VERSIONING.md](../VERSIONING.md); everyone listed is
 affected by them.
 
-## Messages (25)
+## Messages (26)
 
 | Message | Kind | Owner | Producers | Consumers | Channel | Schema |
 |---|---|---|---|---|---|---|
@@ -22,6 +22,7 @@ affected by them.
 | `NotificationRequested` v1 | command | **notification-service** | saga-orchestrator, order-service, payment-service | notification-service | SQS notification-commands | [schema](../schemas/notification-service/notification-requested.v1.schema.json) |
 | `OrderCancelled` v1 | event | **order-service** | order-service | saga-orchestrator, notification-service | SNS order-events | [schema](../schemas/order-service/order-cancelled.v1.schema.json) |
 | `OrderConfirmed` v1 | event | **order-service** | order-service | saga-orchestrator, notification-service | SNS order-events | [schema](../schemas/order-service/order-confirmed.v1.schema.json) |
+| `OrderConfirmed` v2 | event | **order-service** | order-service | saga-orchestrator, notification-service | SNS order-events | [schema](../schemas/order-service/order-confirmed.v2.schema.json) |
 | `OrderCreated` v1 | event | **order-service** | order-service | — | SNS order-events | [schema](../schemas/order-service/order-created.v1.schema.json) |
 | `OrderStatusChanged` v1 | event | **order-service** | order-service | notification-service | SNS order-events | [schema](../schemas/order-service/order-status-changed.v1.schema.json) |
 | `OrderStatusTransitionRequested` v1 | command | **order-service** | saga-orchestrator | order-service | SQS order-commands.fifo | [schema](../schemas/order-service/order-status-transition-requested.v1.schema.json) |
