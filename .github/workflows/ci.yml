@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the compatibility check compares with the latest release tag
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - name: Schemas, examples, ownership rules, AsyncAPI, compatibility rules
+        run: npm test
+      - name: Generated files are current
+        run: npm run check
+      - name: Backward compatibility against the latest release (and the version bump it needs)
+        run: npm run compat

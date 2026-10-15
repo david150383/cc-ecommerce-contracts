@@ -1,0 +1,1183 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "E-commerce platform messaging",
+    "version": "1.0.0",
+    "description": "Events (owned by their producer, SNS) and commands (owned by their consumer, SQS). Generated from schemas/ by scripts/build.mjs."
+  },
+  "defaultContentType": "application/json",
+  "channels": {
+    "auth-events": {
+      "address": "auth-events",
+      "title": "auth-events",
+      "description": "SNS topic. Fanned out to SQS inbox queues, filtered on the messageType attribute.",
+      "messages": {
+        "UserEmailVerifiedV1": {
+          "$ref": "#/components/messages/UserEmailVerifiedV1"
+        },
+        "UserRegisteredV1": {
+          "$ref": "#/components/messages/UserRegisteredV1"
+        }
+      },
+      "bindings": {
+        "sns": {
+          "name": "auth-events",
+          "bindingVersion": "0.1.0"
+        }
+      }
+    },
+    "inventory-commands": {
+      "address": "inventory-commands",
+      "title": "inventory-commands",
+      "description": "SQS queue: commands for exactly one consumer.",
+      "messages": {
+        "InventoryReservationConfirmRequestedV1": {
+          "$ref": "#/components/messages/InventoryReservationConfirmRequestedV1"
+        },
+        "InventoryReservationReleaseRequestedV1": {
+          "$ref": "#/components/messages/InventoryReservationReleaseRequestedV1"
+        },
+        "InventoryReservationRequestedV1": {
+          "$ref": "#/components/messages/InventoryReservationRequestedV1"
+        }
+      },
+      "bindings": {
+        "sqs": {
+          "queue": {
+            "name": "inventory-commands",
+            "fifoQueue": false
+          },
+          "bindingVersion": "0.2.0"
+        }
+      }
+    },
+    "inventory-events": {
+      "address": "inventory-events",
+      "title": "inventory-events",
+      "description": "SNS topic. Fanned out to SQS inbox queues, filtered on the messageType attribute.",
+      "messages": {
+        "InventoryLowStockV1": {
+          "$ref": "#/components/messages/InventoryLowStockV1"
+        },
+        "InventoryReservationConfirmedV1": {
+          "$ref": "#/components/messages/InventoryReservationConfirmedV1"
+        },
+        "InventoryReservationFailedV1": {
+          "$ref": "#/components/messages/InventoryReservationFailedV1"
+        },
+        "InventoryReservationReleasedV1": {
+          "$ref": "#/components/messages/InventoryReservationReleasedV1"
+        },
+        "InventoryReservedV1": {
+          "$ref": "#/components/messages/InventoryReservedV1"
+        }
+      },
+      "bindings": {
+        "sns": {
+          "name": "inventory-events",
+          "bindingVersion": "0.1.0"
+        }
+      }
+    },
+    "notification-commands": {
+      "address": "notification-commands",
+      "title": "notification-commands",
+      "description": "SQS queue: commands for exactly one consumer.",
+      "messages": {
+        "NotificationRequestedV1": {
+          "$ref": "#/components/messages/NotificationRequestedV1"
+        }
+      },
+      "bindings": {
+        "sqs": {
+          "queue": {
+            "name": "notification-commands",
+            "fifoQueue": false
+          },
+          "bindingVersion": "0.2.0"
+        }
+      }
+    },
+    "order-commands": {
+      "address": "order-commands.fifo",
+      "title": "order-commands",
+      "description": "SQS queue: commands for exactly one consumer. FIFO, MessageGroupId = orderId.",
+      "messages": {
+        "OrderStatusTransitionRequestedV1": {
+          "$ref": "#/components/messages/OrderStatusTransitionRequestedV1"
+        }
+      },
+      "bindings": {
+        "sqs": {
+          "queue": {
+            "name": "order-commands.fifo",
+            "fifoQueue": true
+          },
+          "bindingVersion": "0.2.0"
+        }
+      }
+    },
+    "order-events": {
+      "address": "order-events",
+      "title": "order-events",
+      "description": "SNS topic. Fanned out to SQS inbox queues, filtered on the messageType attribute.",
+      "messages": {
+        "OrderCancelledV1": {
+          "$ref": "#/components/messages/OrderCancelledV1"
+        },
+        "OrderConfirmedV1": {
+          "$ref": "#/components/messages/OrderConfirmedV1"
+        },
+        "OrderCreatedV1": {
+          "$ref": "#/components/messages/OrderCreatedV1"
+        },
+        "OrderStatusChangedV1": {
+          "$ref": "#/components/messages/OrderStatusChangedV1"
+        }
+      },
+      "bindings": {
+        "sns": {
+          "name": "order-events",
+          "bindingVersion": "0.1.0"
+        }
+      }
+    },
+    "payment-commands": {
+      "address": "payment-commands",
+      "title": "payment-commands",
+      "description": "SQS queue: commands for exactly one consumer.",
+      "messages": {
+        "RefundRequestedV1": {
+          "$ref": "#/components/messages/RefundRequestedV1"
+        }
+      },
+      "bindings": {
+        "sqs": {
+          "queue": {
+            "name": "payment-commands",
+            "fifoQueue": false
+          },
+          "bindingVersion": "0.2.0"
+        }
+      }
+    },
+    "payment-events": {
+      "address": "payment-events",
+      "title": "payment-events",
+      "description": "SNS topic. Fanned out to SQS inbox queues, filtered on the messageType attribute.",
+      "messages": {
+        "PaymentFailedV1": {
+          "$ref": "#/components/messages/PaymentFailedV1"
+        },
+        "PaymentInitiatedV1": {
+          "$ref": "#/components/messages/PaymentInitiatedV1"
+        },
+        "PaymentSucceededV1": {
+          "$ref": "#/components/messages/PaymentSucceededV1"
+        },
+        "RefundFailedV1": {
+          "$ref": "#/components/messages/RefundFailedV1"
+        },
+        "RefundSucceededV1": {
+          "$ref": "#/components/messages/RefundSucceededV1"
+        }
+      },
+      "bindings": {
+        "sns": {
+          "name": "payment-events",
+          "bindingVersion": "0.1.0"
+        }
+      }
+    },
+    "saga-events": {
+      "address": "saga-events",
+      "title": "saga-events",
+      "description": "SNS topic. Fanned out to SQS inbox queues, filtered on the messageType attribute.",
+      "messages": {
+        "CheckoutCompletedV1": {
+          "$ref": "#/components/messages/CheckoutCompletedV1"
+        },
+        "CheckoutFailedV1": {
+          "$ref": "#/components/messages/CheckoutFailedV1"
+        },
+        "SagaManualReviewRequiredV1": {
+          "$ref": "#/components/messages/SagaManualReviewRequiredV1"
+        }
+      },
+      "bindings": {
+        "sns": {
+          "name": "saga-events",
+          "bindingVersion": "0.1.0"
+        }
+      }
+    }
+  },
+  "operations": {
+    "auth-service.send.UserEmailVerifiedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/auth-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/auth-events/messages/UserEmailVerifiedV1"
+        }
+      ],
+      "x-service": "auth-service"
+    },
+    "auth-service.send.UserRegisteredV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/auth-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/auth-events/messages/UserRegisteredV1"
+        }
+      ],
+      "x-service": "auth-service"
+    },
+    "inventory-service.receive.InventoryReservationConfirmRequestedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/inventory-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-commands/messages/InventoryReservationConfirmRequestedV1"
+        }
+      ],
+      "x-service": "inventory-service"
+    },
+    "inventory-service.receive.InventoryReservationReleaseRequestedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/inventory-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-commands/messages/InventoryReservationReleaseRequestedV1"
+        }
+      ],
+      "x-service": "inventory-service"
+    },
+    "inventory-service.receive.InventoryReservationRequestedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/inventory-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-commands/messages/InventoryReservationRequestedV1"
+        }
+      ],
+      "x-service": "inventory-service"
+    },
+    "inventory-service.send.InventoryLowStockV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/inventory-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-events/messages/InventoryLowStockV1"
+        }
+      ],
+      "x-service": "inventory-service"
+    },
+    "inventory-service.send.InventoryReservationConfirmedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/inventory-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-events/messages/InventoryReservationConfirmedV1"
+        }
+      ],
+      "x-service": "inventory-service"
+    },
+    "inventory-service.send.InventoryReservationFailedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/inventory-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-events/messages/InventoryReservationFailedV1"
+        }
+      ],
+      "x-service": "inventory-service"
+    },
+    "inventory-service.send.InventoryReservationReleasedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/inventory-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-events/messages/InventoryReservationReleasedV1"
+        }
+      ],
+      "x-service": "inventory-service"
+    },
+    "inventory-service.send.InventoryReservedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/inventory-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-events/messages/InventoryReservedV1"
+        }
+      ],
+      "x-service": "inventory-service"
+    },
+    "notification-service.receive.InventoryLowStockV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/inventory-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-events/messages/InventoryLowStockV1"
+        }
+      ],
+      "x-service": "notification-service"
+    },
+    "notification-service.receive.NotificationRequestedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/notification-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/notification-commands/messages/NotificationRequestedV1"
+        }
+      ],
+      "x-service": "notification-service"
+    },
+    "notification-service.receive.OrderCancelledV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/order-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-events/messages/OrderCancelledV1"
+        }
+      ],
+      "x-service": "notification-service"
+    },
+    "notification-service.receive.OrderConfirmedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/order-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-events/messages/OrderConfirmedV1"
+        }
+      ],
+      "x-service": "notification-service"
+    },
+    "notification-service.receive.OrderStatusChangedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/order-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-events/messages/OrderStatusChangedV1"
+        }
+      ],
+      "x-service": "notification-service"
+    },
+    "notification-service.receive.PaymentFailedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/payment-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/payment-events/messages/PaymentFailedV1"
+        }
+      ],
+      "x-service": "notification-service"
+    },
+    "notification-service.receive.RefundSucceededV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/payment-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/payment-events/messages/RefundSucceededV1"
+        }
+      ],
+      "x-service": "notification-service"
+    },
+    "notification-service.receive.UserEmailVerifiedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/auth-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/auth-events/messages/UserEmailVerifiedV1"
+        }
+      ],
+      "x-service": "notification-service"
+    },
+    "notification-service.receive.UserRegisteredV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/auth-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/auth-events/messages/UserRegisteredV1"
+        }
+      ],
+      "x-service": "notification-service"
+    },
+    "order-service.receive.OrderStatusTransitionRequestedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/order-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-commands/messages/OrderStatusTransitionRequestedV1"
+        }
+      ],
+      "x-service": "order-service"
+    },
+    "order-service.send.NotificationRequestedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/notification-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/notification-commands/messages/NotificationRequestedV1"
+        }
+      ],
+      "x-service": "order-service"
+    },
+    "order-service.send.OrderCancelledV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/order-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-events/messages/OrderCancelledV1"
+        }
+      ],
+      "x-service": "order-service"
+    },
+    "order-service.send.OrderConfirmedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/order-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-events/messages/OrderConfirmedV1"
+        }
+      ],
+      "x-service": "order-service"
+    },
+    "order-service.send.OrderCreatedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/order-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-events/messages/OrderCreatedV1"
+        }
+      ],
+      "x-service": "order-service"
+    },
+    "order-service.send.OrderStatusChangedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/order-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-events/messages/OrderStatusChangedV1"
+        }
+      ],
+      "x-service": "order-service"
+    },
+    "payment-service.receive.RefundRequestedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/payment-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/payment-commands/messages/RefundRequestedV1"
+        }
+      ],
+      "x-service": "payment-service"
+    },
+    "payment-service.send.NotificationRequestedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/notification-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/notification-commands/messages/NotificationRequestedV1"
+        }
+      ],
+      "x-service": "payment-service"
+    },
+    "payment-service.send.PaymentFailedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/payment-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/payment-events/messages/PaymentFailedV1"
+        }
+      ],
+      "x-service": "payment-service"
+    },
+    "payment-service.send.PaymentInitiatedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/payment-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/payment-events/messages/PaymentInitiatedV1"
+        }
+      ],
+      "x-service": "payment-service"
+    },
+    "payment-service.send.PaymentSucceededV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/payment-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/payment-events/messages/PaymentSucceededV1"
+        }
+      ],
+      "x-service": "payment-service"
+    },
+    "payment-service.send.RefundFailedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/payment-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/payment-events/messages/RefundFailedV1"
+        }
+      ],
+      "x-service": "payment-service"
+    },
+    "payment-service.send.RefundSucceededV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/payment-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/payment-events/messages/RefundSucceededV1"
+        }
+      ],
+      "x-service": "payment-service"
+    },
+    "saga-orchestrator.receive.InventoryReservationConfirmedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/inventory-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-events/messages/InventoryReservationConfirmedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.receive.InventoryReservationFailedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/inventory-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-events/messages/InventoryReservationFailedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.receive.InventoryReservationReleasedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/inventory-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-events/messages/InventoryReservationReleasedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.receive.InventoryReservedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/inventory-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-events/messages/InventoryReservedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.receive.OrderCancelledV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/order-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-events/messages/OrderCancelledV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.receive.OrderConfirmedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/order-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-events/messages/OrderConfirmedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.receive.PaymentFailedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/payment-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/payment-events/messages/PaymentFailedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.receive.PaymentSucceededV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/payment-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/payment-events/messages/PaymentSucceededV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.receive.RefundFailedV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/payment-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/payment-events/messages/RefundFailedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.receive.RefundSucceededV1": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/payment-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/payment-events/messages/RefundSucceededV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.send.CheckoutCompletedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/saga-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/saga-events/messages/CheckoutCompletedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.send.CheckoutFailedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/saga-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/saga-events/messages/CheckoutFailedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.send.InventoryReservationConfirmRequestedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/inventory-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-commands/messages/InventoryReservationConfirmRequestedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.send.InventoryReservationReleaseRequestedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/inventory-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-commands/messages/InventoryReservationReleaseRequestedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.send.InventoryReservationRequestedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/inventory-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/inventory-commands/messages/InventoryReservationRequestedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.send.NotificationRequestedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/notification-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/notification-commands/messages/NotificationRequestedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.send.OrderStatusTransitionRequestedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/order-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/order-commands/messages/OrderStatusTransitionRequestedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.send.RefundRequestedV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/payment-commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/payment-commands/messages/RefundRequestedV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    },
+    "saga-orchestrator.send.SagaManualReviewRequiredV1": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/saga-events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/saga-events/messages/SagaManualReviewRequiredV1"
+        }
+      ],
+      "x-service": "saga-orchestrator"
+    }
+  },
+  "components": {
+    "messages": {
+      "CheckoutCompletedV1": {
+        "name": "CheckoutCompleted",
+        "title": "CheckoutCompleted v1",
+        "summary": "The checkout saga reached COMPLETED.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/saga-orchestrator/checkout-completed.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "saga-orchestrator"
+      },
+      "CheckoutFailedV1": {
+        "name": "CheckoutFailed",
+        "title": "CheckoutFailed v1",
+        "summary": "The checkout saga ended in CANCELLED or FAILED after compensation completed.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/saga-orchestrator/checkout-failed.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "saga-orchestrator"
+      },
+      "InventoryLowStockV1": {
+        "name": "InventoryLowStock",
+        "title": "InventoryLowStock v1",
+        "summary": "Available quantity fell to or below the SKU's threshold.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/inventory-service/inventory-low-stock.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "inventory-service"
+      },
+      "InventoryReservationConfirmedV1": {
+        "name": "InventoryReservationConfirmed",
+        "title": "InventoryReservationConfirmed v1",
+        "summary": "Reserved stock has been permanently deducted.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/inventory-service/inventory-reservation-confirmed.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "inventory-service"
+      },
+      "InventoryReservationConfirmRequestedV1": {
+        "name": "InventoryReservationConfirmRequested",
+        "title": "InventoryReservationConfirmRequested v1",
+        "summary": "Convert a reservation into a permanent stock deduction (payment succeeded).",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/inventory-service/inventory-reservation-confirm-requested.v1.schema.json"
+          }
+        },
+        "x-kind": "command",
+        "x-owner": "inventory-service"
+      },
+      "InventoryReservationFailedV1": {
+        "name": "InventoryReservationFailed",
+        "title": "InventoryReservationFailed v1",
+        "summary": "Nothing was reserved (all-or-nothing).",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/inventory-service/inventory-reservation-failed.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "inventory-service"
+      },
+      "InventoryReservationReleasedV1": {
+        "name": "InventoryReservationReleased",
+        "title": "InventoryReservationReleased v1",
+        "summary": "Reserved stock was returned to available (on request or because the reservation expired). Also emitted when there was nothing to release.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/inventory-service/inventory-reservation-released.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "inventory-service"
+      },
+      "InventoryReservationReleaseRequestedV1": {
+        "name": "InventoryReservationReleaseRequested",
+        "title": "InventoryReservationReleaseRequested v1",
+        "summary": "Return reserved stock. reservationId may be null when the saga timed out before learning it; release then targets the order.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/inventory-service/inventory-reservation-release-requested.v1.schema.json"
+          }
+        },
+        "x-kind": "command",
+        "x-owner": "inventory-service"
+      },
+      "InventoryReservationRequestedV1": {
+        "name": "InventoryReservationRequested",
+        "title": "InventoryReservationRequested v1",
+        "summary": "Reserve stock for all lines of an order, atomically (all lines or none).",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/inventory-service/inventory-reservation-requested.v1.schema.json"
+          }
+        },
+        "x-kind": "command",
+        "x-owner": "inventory-service"
+      },
+      "InventoryReservedV1": {
+        "name": "InventoryReserved",
+        "title": "InventoryReserved v1",
+        "summary": "Stock for every line is held until expiresAt.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/inventory-service/inventory-reserved.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "inventory-service"
+      },
+      "NotificationRequestedV1": {
+        "name": "NotificationRequested",
+        "title": "NotificationRequested v1",
+        "summary": "Ask for a templated notification. data must not contain secrets; password-reset/verification links use the internal REST endpoint instead.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/notification-service/notification-requested.v1.schema.json"
+          }
+        },
+        "x-kind": "command",
+        "x-owner": "notification-service"
+      },
+      "OrderCancelledV1": {
+        "name": "OrderCancelled",
+        "title": "OrderCancelled v1",
+        "summary": "The order is cancelled (terminal).",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/order-service/order-cancelled.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "order-service"
+      },
+      "OrderConfirmedV1": {
+        "name": "OrderConfirmed",
+        "title": "OrderConfirmed v1",
+        "summary": "Payment captured and stock committed; the order is confirmed.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/order-service/order-confirmed.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "order-service"
+      },
+      "OrderCreatedV1": {
+        "name": "OrderCreated",
+        "title": "OrderCreated v1",
+        "summary": "A pending order was created with immutable price snapshots.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/order-service/order-created.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "order-service"
+      },
+      "OrderStatusChangedV1": {
+        "name": "OrderStatusChanged",
+        "title": "OrderStatusChanged v1",
+        "summary": "Any status transition (used for tracking notifications such as SHIPPED/DELIVERED).",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/order-service/order-status-changed.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "order-service"
+      },
+      "OrderStatusTransitionRequestedV1": {
+        "name": "OrderStatusTransitionRequested",
+        "title": "OrderStatusTransitionRequested v1",
+        "summary": "Move an order to a new status. The Order Service validates the transition and rejects invalid ones.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/order-service/order-status-transition-requested.v1.schema.json"
+          }
+        },
+        "x-kind": "command",
+        "x-owner": "order-service"
+      },
+      "PaymentFailedV1": {
+        "name": "PaymentFailed",
+        "title": "PaymentFailed v1",
+        "summary": "The payment definitively failed or expired. Contains no card details.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/payment-service/payment-failed.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "payment-service"
+      },
+      "PaymentInitiatedV1": {
+        "name": "PaymentInitiated",
+        "title": "PaymentInitiated v1",
+        "summary": "A checkout session was created with the provider for the authoritative order amount.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/payment-service/payment-initiated.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "payment-service"
+      },
+      "PaymentSucceededV1": {
+        "name": "PaymentSucceeded",
+        "title": "PaymentSucceeded v1",
+        "summary": "Funds captured, confirmed by a verified provider webhook or server-side status query. Never by a browser redirect.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/payment-service/payment-succeeded.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "payment-service"
+      },
+      "RefundFailedV1": {
+        "name": "RefundFailed",
+        "title": "RefundFailed v1",
+        "summary": "The provider rejected the refund, it could not be confirmed after retries, or the payment was not refundable (wrong status or amount).",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/payment-service/refund-failed.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "payment-service"
+      },
+      "RefundRequestedV1": {
+        "name": "RefundRequested",
+        "title": "RefundRequested v1",
+        "summary": "Refund (part of) a captured payment. Completion is reported only by RefundSucceeded.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/payment-service/refund-requested.v1.schema.json"
+          }
+        },
+        "x-kind": "command",
+        "x-owner": "payment-service"
+      },
+      "RefundSucceededV1": {
+        "name": "RefundSucceeded",
+        "title": "RefundSucceeded v1",
+        "summary": "The provider confirmed the refund completed.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/payment-service/refund-succeeded.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "payment-service"
+      },
+      "SagaManualReviewRequiredV1": {
+        "name": "SagaManualReviewRequired",
+        "title": "SagaManualReviewRequired v1",
+        "summary": "Automatic compensation could not be verified; an operator must intervene.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/saga-orchestrator/saga-manual-review-required.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "saga-orchestrator"
+      },
+      "UserEmailVerifiedV1": {
+        "name": "UserEmailVerified",
+        "title": "UserEmailVerified v1",
+        "summary": "The user proved ownership of their email address.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/auth-service/user-email-verified.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "auth-service"
+      },
+      "UserRegisteredV1": {
+        "name": "UserRegistered",
+        "title": "UserRegistered v1",
+        "summary": "A new account was created. Contains no credentials or verification tokens.",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=2020-12",
+          "schema": {
+            "$ref": "../schemas/auth-service/user-registered.v1.schema.json"
+          }
+        },
+        "x-kind": "event",
+        "x-owner": "auth-service"
+      }
+    }
+  }
+}

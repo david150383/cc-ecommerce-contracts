@@ -1,0 +1,27 @@
+{
+  "name": "@ecommerce/contracts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Published API (OpenAPI) and message (JSON Schema, AsyncAPI) contracts of the e-commerce platform",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs --check",
+    "compat": "node scripts/compat.mjs",
+    "sync:openapi": "node scripts/sync-openapi.mjs",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@asyncapi/specs": "^6.11.1",
+    "@eslint/js": "^10.0.1",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "eslint": "^10.12.0",
+    "globals": "^17.13.0",
+    "vitest": "^4.1.11"
+  }
+}
